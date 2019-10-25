@@ -4,7 +4,7 @@
   <!-- Map file path, without extensions -->
   <!-- Use $(rospack find PACKAGE) -->
   <arg name="map_file" default="$(find turtlebot3_datasets)/data/map" />
-  <arg name="rosbag_file" default="$(find turtlebot3_datasets)/data/slam_easy.bag"/>
+  <arg name="rosbag_file" default="$(find turtlebot3_datasets)/data/fixed_slam_easy.bag"/>
 
   <!-- Disable if running online and not from a bag -->
   <param name="use_sim_time" value="true" />
