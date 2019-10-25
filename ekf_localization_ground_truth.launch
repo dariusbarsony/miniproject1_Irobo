@@ -1,0 +1,27 @@
+<launch>
+  <!-- Map file path, without extensions -->
+  <!-- Use $(rospack find PACKAGE) -->
+  <arg name="rosbag_file" default="$(find turtlebot3_datasets)/data/fixed_slam_easy.bag"/>
+
+  <!-- Disable if running online and not from a bag -->
+  <param name="use_sim_time" value="true" />
+
+  <!-- NODES -->
+   <node name="hector_trajectory_server" pkg="hector_trajectory_server" type="hector_trajectory_server" >
+      <param name="target_frame_name" value="map"/>
+      <param name="source_frame_name" value="mocap_laser_link"/>
+   </node>
+  
+   <node name="tf2_ros_mocap" pkg="tf2_ros" type="static_transform_publisher" args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap odom" />
+   <node name="tf2_ros_odom"  pkg="tf2_ros" type="static_transform_publisher" args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap map" />
+
+  <!-- Rviz visualization -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ekf_localization)/rviz/ekf.rviz" />
+
+  <!-- Play the bag -->
+  <node pkg="rosbag" type="play" name="player" output="log" args=" -r 1 --clock $(arg rosbag_file)"/>
+
+  <!-- Record topics in bag -->
+  <node pkg="rosbag" type="record" name="rosbag_recorder" args="record -o $(find ekf_localization)/output/reference_case_ground_truth.bag /trajectory"/>
+
+</launch>
